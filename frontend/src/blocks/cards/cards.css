@@ -1,0 +1,21 @@
+@import url(./__list/cards__list.css);
+@import url(./__item/cards__item.css);
+@import url(./__image/cards__image.css);
+@import url(./__delete-btn/cards__delete-btn.css);
+@import url(./__rating/cards__rating.css);
+@import url(./__title/cards__title.css);
+@import url(./__heart-container/cards__heart-container.css);
+@import url(./__heart/cards__heart.css);
+@import url(./__hearts-number/cards__hearts-number.css);
+@import url(./__heart/_active/cards__heart_active.css);
+
+.cards {
+  width: 69%;
+  margin: 0 auto;
+}
+
+@media (max-width: 964px) {
+  .cards {
+    width: 88%;
+  }
+}

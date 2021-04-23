@@ -1,0 +1,7 @@
+.cards__rating {
+  padding: 14px 15px 22px 21px;
+  display: flex;
+  justify-content: space-between;
+  background: #ffffff;
+  align-items: center;
+}

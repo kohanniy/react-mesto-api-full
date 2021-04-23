@@ -1,0 +1,33 @@
+.header__signout-btn {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 1.22;
+  color: #a9a9a9;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: opacity 0.5s linear;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  transition: opacity 0.5s linear;
+}
+
+.header__signout-btn:hover {
+  opacity: 0.6;
+}
+
+@media (max-width: 575px) {
+  .header__signout-btn {
+    transform: scale(0);
+    transition: transform 0.4s linear;
+  }
+
+  .menu-opened .header__signout-btn {
+    transform: scale(1);
+  }
+}
+
+

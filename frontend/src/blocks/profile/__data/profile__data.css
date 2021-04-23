@@ -1,0 +1,28 @@
+.profile__data {
+  display: -ms-grid;
+  display: grid;
+  grid-template-columns: fit-content(295px) 24px;
+  grid-template-rows: repeat(2, auto);
+  column-gap: 18px;
+  row-gap: 4px;
+  margin-right: auto;
+  margin-left: 31px;
+}
+
+@media (max-width: 964px) {
+  .profile__data {
+    margin-bottom: 35px;
+    margin-right: 0;
+    margin-left: 0;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 426px) {
+  .profile__data {
+    width: 100%;
+    grid-template-columns: fit-content(201px) 18px;
+    column-gap: 0;
+    row-gap: 0;
+  }
+}

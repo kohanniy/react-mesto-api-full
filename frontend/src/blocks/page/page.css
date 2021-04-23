@@ -1,0 +1,14 @@
+@import url(./__container/page__container.css);
+
+.page {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background: #000000;
+  font-family: 'Inter', Arial, sans-serif;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+}

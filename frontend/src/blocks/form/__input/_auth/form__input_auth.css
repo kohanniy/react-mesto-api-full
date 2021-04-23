@@ -1,0 +1,10 @@
+.form__input_auth {
+  color: #fff;
+  font-weight: 500;
+  background-color: transparent;
+}
+
+.form__input_auth:-webkit-autofill {
+  box-shadow: inset 0 0 0 1000px #000;
+  -webkit-text-fill-color: #ccc;
+}

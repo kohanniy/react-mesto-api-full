@@ -1,0 +1,12 @@
+.form__button_auth {
+  border: none;
+  background: #fff;
+  color: #000;
+  margin-top: 186px;
+}
+
+@media (max-width: 492px) {
+  .form__button_auth {
+    margin-top: 153px;
+  }
+}

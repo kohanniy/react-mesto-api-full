@@ -1,0 +1,27 @@
+.header {
+  width: 69%;
+  box-sizing: border-box;
+  padding: 41px 3px 39px;
+  border-bottom: 1px solid rgba(84, 84, 84, .7);
+  margin: 0 auto;
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(min-content, max-content));
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+@media (max-width: 964px) {
+  .header {
+    width: 88%;
+  }
+}
+
+@media (max-width: 575px) {
+  .header {
+    width: 100%;
+    padding: 34px 26px 31px;
+    grid-template-columns: 1fr;
+  }
+}

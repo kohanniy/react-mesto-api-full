@@ -1,0 +1,10 @@
+.form__heading_type_auth {
+  color: #fff;
+  text-align: center;
+}
+
+@media (max-width: 492px) {
+  .form__heading_type_auth {
+    margin-bottom: 40px;
+  }
+}

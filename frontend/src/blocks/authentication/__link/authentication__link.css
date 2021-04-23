@@ -1,0 +1,9 @@
+.authentication__link {
+  text-decoration: none;
+  color: #fff;
+  transition: opacity 0.5s;
+}
+
+.authentication__link:hover {
+  opacity: 0.6;
+}

@@ -1,0 +1,32 @@
+.form__input {
+  border: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin-bottom: 5px;
+  font-family: inherit;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #000000;
+  padding-bottom: 11px;
+}
+
+.form__input:focus {
+  outline: 1px solid gray;
+}
+
+.form__input:-webkit-autofill {
+  box-shadow: inset 0 0 0 1000px #fff;
+  -webkit-text-fill-color: #000;
+}
+
+@media (max-width: 492px) {
+  .form__input {
+    margin-bottom: 2px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}

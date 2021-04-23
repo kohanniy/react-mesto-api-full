@@ -1,0 +1,15 @@
+.authentication {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  padding-top: 26px;
+}
+
+@media (max-width: 492px) {
+  .authentication {
+    padding-top: 9px;
+  }
+}
+
+

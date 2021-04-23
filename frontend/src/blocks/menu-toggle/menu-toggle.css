@@ -1,0 +1,24 @@
+.menu-toggle {
+  outline: none;
+  width: 42px;
+  height: 42px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  transition: opacity 0.5s linear;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s linear;
+}
+
+.menu-toggle:hover {
+  opacity: 0.6;
+}
+
+@media (max-width: 575px) {
+  .menu-toggle {
+    display: flex;
+  }
+}
