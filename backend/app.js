@@ -21,20 +21,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-const corsOptions = {
-  origin: [
-    'http://localhost:8080',
-    'http://mesto.kohanniy.nomoredomains.club',
-    'https://mesto.kohanniy.nomoredomains.club',
-    'https://infallible-agnesi-ade491.netlify.app',
-    'https://kohanniy.github.io/',
-  ],
-};
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(requestLogger);
 
