@@ -21,10 +21,26 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
+const whitelist = [
+  'http://mesto.kohanniy.nomoredomains.club',
+  'https://mesto.kohanniy.nomoredomains.club',
+  'https://infallible-agnesi-ade491.netlify.app',
+];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
