@@ -29,14 +29,12 @@ const corsOptions = {
     'https://infallible-agnesi-ade491.netlify.app',
     'https://kohanniy.github.io/',
   ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
 };
-
-app.use('*', cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
@@ -54,12 +52,11 @@ app.use(errorLogger);
 
 app.use(errors());
 
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
   res.status(statusCode).send({ message: statusCode === 500 ? 'Ошибка сервера' : message });
-
-  next();
 });
 
 app.listen(PORT, () => {
