@@ -117,8 +117,9 @@ function App() {
   }, [])
 
   function handleUpdateUser({name, about}) {
+    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.setUserInfo({name, about})
+    api.setUserInfo({name, about}, token)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         closeAllPopups();
@@ -132,8 +133,9 @@ function App() {
   }
 
   function handleUpdateAvatar({ avatar }) {
+    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.setAvatar({avatar})
+    api.setAvatar({avatar}, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -147,8 +149,9 @@ function App() {
   }
 
   function handleCardLike(card) {
+    const token = localStorage.getItem('token');
     const isLiked = card.likes.some(like => like._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked)
+    api.changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
@@ -163,8 +166,9 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.deleteCard(card._id)
+    api.deleteCard(card._id, token)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
@@ -179,8 +183,9 @@ function App() {
   }
 
   function handleAddPlaceSubmit({name, link}) {
+    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.addCard({name, link})
+    api.addCard({name, link}, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -222,13 +227,14 @@ function App() {
           setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
           setInfoTooltipOpen(true);
         })
-      }
+    }
   }, [history, resultRegistration]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
     if (loggedIn) {
-      api.getDataForRendered()
+      const token = localStorage.getItem('token');
+      api.getDataForRendered(token)
       .then(([ cardsData, userData ]) => {
         setCards(cardsData);
         setCurrentUser(userData);
