@@ -1,4 +1,4 @@
-const BASE_URL = 'http://mesto.kohanniy.nomoredomains.club/';
+const BASE_URL = 'http://api.mesto.kohanniy.nomoredomains.club/';
 
 class Api {
   constructor(url) {

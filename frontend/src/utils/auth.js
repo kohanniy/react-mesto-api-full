@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://mesto.kohanniy.nomoredomains.club/';
+export const BASE_URL = 'http://api.mesto.kohanniy.nomoredomains.club/';
 
 export const parseResponseFromServer = (res) => {
   if (res.ok) {
