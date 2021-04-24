@@ -21,20 +21,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-const corsWhiteList = [
-  'http://localhost:8080',
-  'http://mesto.kohanniy.nomoredomains.club',
-  'https://mesto.kohanniy.nomoredomains.club',
-  'https://infallible-agnesi-ade491.netlify.app',
-  'https://kohanniy.github.io/',
-];
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (corsWhiteList.indexOf(origin) !== -1) {
-      callback(null, true);
-    }
-  },
-  credentials: true,
+  origin: [
+    'http://localhost:8080',
+    'http://mesto.kohanniy.nomoredomains.club',
+    'https://mesto.kohanniy.nomoredomains.club',
+    'https://infallible-agnesi-ade491.netlify.app',
+    'https://kohanniy.github.io/',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
 };
 
 app.use(bodyParser.json());

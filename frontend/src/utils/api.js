@@ -19,7 +19,6 @@ class Api {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      credentials: 'include',
     })
     .then(this._parseResponseFromServer)
   }
@@ -30,7 +29,6 @@ class Api {
       headers: {
         'Authorization': `Bearer ${token}`
       },
-      credentials: 'include',
     })
     .then(this._parseResponseFromServer)
   }
@@ -46,7 +44,6 @@ class Api {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
@@ -59,7 +56,6 @@ class Api {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
@@ -72,7 +68,6 @@ class Api {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
@@ -84,7 +79,6 @@ class Api {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      credentials: 'include',
     })
     .then(this._parseResponseFromServer)
   }
@@ -96,7 +90,6 @@ class Api {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
     })
     .then(this._parseResponseFromServer)
   }
