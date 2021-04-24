@@ -21,28 +21,22 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-const whitelist = [
-  'http://mesto.kohanniy.nomoredomains.club/',
-  'https://mesto.kohanniy.nomoredomains.club/',
-  'https://infallible-agnesi-ade491.netlify.app/',
-];
-
-const corsOptions = {
-  origin(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+const options = {
+  origin: [
+    'http://mesto.kohanniy.nomoredomains.club/',
+    'https://mesto.kohanniy.nomoredomains.club/',
+    'https://infallible-agnesi-ade491.netlify.app/',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
 };
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.options('*', cors(corsOptions));
-
-app.use(cors(corsOptions));
+app.use(cors(options));
 
 app.use(requestLogger);
 
