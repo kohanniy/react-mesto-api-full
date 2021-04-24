@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.options('*', cors(corsOptions));
 
-app.use('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(requestLogger);
 
