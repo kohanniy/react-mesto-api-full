@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-app.use(cors(corsOptions));
+app.use('*', cors(corsOptions));
 app.post('/signup', checkNewUser, createUser);
 app.post('/signin', checkLogin, login);
 
