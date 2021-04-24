@@ -22,9 +22,9 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 const whitelist = [
-  'http://mesto.kohanniy.nomoredomains.club',
-  'https://mesto.kohanniy.nomoredomains.club',
-  'https://infallible-agnesi-ade491.netlify.app',
+  'http://mesto.kohanniy.nomoredomains.club/',
+  'https://mesto.kohanniy.nomoredomains.club/',
+  'https://infallible-agnesi-ade491.netlify.app/',
 ];
 
 const corsOptions = {
@@ -40,7 +40,9 @@ const corsOptions = {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
+app.use('*', cors(corsOptions));
 
 app.use(requestLogger);
 
