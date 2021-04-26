@@ -39,7 +39,7 @@ app.use(cors({
     'https://infallible-agnesi-ade491.netlify.app/',
   ],
   preflightContinue: false,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'Accept'],
   credentials: true,
 }));
 
