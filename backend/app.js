@@ -23,15 +23,6 @@ app.options('*', cors({
   credentials: true,
 }));
 
-app.use(cors({
-  origin: [
-    'http://mesto.kohanniy.nomoredomains.club/',
-    'https://mesto.kohanniy.nomoredomains.club/',
-    'https://infallible-agnesi-ade491.netlify.app/',
-  ],
-  credentials: true,
-}));
-
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -43,6 +34,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
+
+app.use('*', cors({
+  origin: [
+    'http://mesto.kohanniy.nomoredomains.club/',
+    'https://mesto.kohanniy.nomoredomains.club/',
+    'https://infallible-agnesi-ade491.netlify.app/',
+  ],
+  credentials: true,
+}));
 
 app.post('/signup', checkNewUser, createUser);
 app.post('/signin', checkLogin, login);
