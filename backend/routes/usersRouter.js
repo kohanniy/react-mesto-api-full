@@ -4,7 +4,7 @@ const { checkId, checkUpdateProfile, checkUpdateAvatar } = require('../middlewar
 
 usersRouter.get('/users', getUsers);
 usersRouter.get('/users/:id', checkId, getUser);
-usersRouter.patch('/users/me', checkId, getUser);
+usersRouter.get('/users/me', checkId, getUser);
 usersRouter.patch('/users/me', checkUpdateProfile, updateProfile);
 usersRouter.patch('/users/me/avatar', checkUpdateAvatar, updateAvatar);
 
