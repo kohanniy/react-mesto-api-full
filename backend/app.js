@@ -32,7 +32,9 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-app.use(cors());
+app.use(cors({
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
