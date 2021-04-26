@@ -33,6 +33,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.use(cors({
+  origin: '*',
   allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
 }));
 
@@ -42,6 +43,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 app.options('*', cors({
+  origin: '*',
   allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
 }));
 app.post('/signup', checkNewUser, createUser);
