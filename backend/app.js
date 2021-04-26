@@ -14,6 +14,15 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
+app.options('*', cors({
+  origin: [
+    'http://mesto.kohanniy.nomoredomains.club/',
+    'https://mesto.kohanniy.nomoredomains.club/',
+    'https://infallible-agnesi-ade491.netlify.app/',
+  ],
+  credentials: true,
+}));
+
 app.use(cors({
   origin: [
     'http://mesto.kohanniy.nomoredomains.club/',
