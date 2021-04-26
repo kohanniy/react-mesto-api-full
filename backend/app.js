@@ -20,7 +20,6 @@ app.options('*', cors({
     'https://mesto.kohanniy.nomoredomains.club/',
     'https://infallible-agnesi-ade491.netlify.app/',
   ],
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
   credentials: true,
 }));
 
@@ -42,7 +41,6 @@ app.use('*', cors({
     'https://mesto.kohanniy.nomoredomains.club/',
     'https://infallible-agnesi-ade491.netlify.app/',
   ],
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
   credentials: true,
 }));
 
