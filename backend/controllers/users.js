@@ -42,6 +42,17 @@ function getUser(req, res, next) {
     .catch(next);
 }
 
+function getUserInfo(req, res, next) {
+  User.findOne(req.user)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь не найден');
+      }
+      return res.status(200).send(user);
+    })
+    .catch(next);
+}
+
 // Создаем пользователя
 function createUser(req, res, next) {
   bcrypt.hash(req.body.password, 10)
@@ -104,6 +115,7 @@ module.exports = {
   login,
   getUsers,
   getUser,
+  getUserInfo,
   createUser,
   updateProfile,
   updateAvatar,
