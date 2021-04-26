@@ -41,7 +41,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
-app.options('*', cors());
+app.options('*', cors({
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
+}));
 app.post('/signup', checkNewUser, createUser);
 app.post('/signin', checkLogin, login);
 
