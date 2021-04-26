@@ -14,16 +14,16 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-app.options('*', cors({
-  origin: [
-    'http://mesto.kohanniy.nomoredomains.club/',
-    'https://mesto.kohanniy.nomoredomains.club/',
-    'https://infallible-agnesi-ade491.netlify.app/',
-  ],
-  preflightContinue: false,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
-  credentials: true,
-}));
+// app.options('*', cors({
+//   origin: [
+//     'http://mesto.kohanniy.nomoredomains.club/',
+//     'https://mesto.kohanniy.nomoredomains.club/',
+//     'https://infallible-agnesi-ade491.netlify.app/',
+//   ],
+//   preflightContinue: false,
+//   allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+//   credentials: true,
+// }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -32,12 +32,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(requestLogger);
-
-app.use('*', cors({
+app.use(cors({
   origin: [
     'http://mesto.kohanniy.nomoredomains.club/',
     'https://mesto.kohanniy.nomoredomains.club/',
@@ -47,6 +42,11 @@ app.use('*', cors({
   allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
   credentials: true,
 }));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(requestLogger);
 
 app.post('/signup', checkNewUser, createUser);
 app.post('/signin', checkLogin, login);
