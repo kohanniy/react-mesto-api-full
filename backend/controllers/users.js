@@ -32,18 +32,7 @@ function getUsers(req, res, next) {
 
 // Находим конкретного пользователя
 function getUser(req, res, next) {
-  User.findById(req.params.id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден');
-      }
-      return res.status(200).send(user);
-    })
-    .catch(next);
-}
-
-function getUserInfo(req, res, next) {
-  User.findOne(req.user)
+  User.findById(req.params.id === 'me' ? req.user : req.params.id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
@@ -115,7 +104,6 @@ module.exports = {
   login,
   getUsers,
   getUser,
-  getUserInfo,
   createUser,
   updateProfile,
   updateAvatar,
