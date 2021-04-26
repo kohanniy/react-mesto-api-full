@@ -32,16 +32,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useUnifiedTopology: true,
 });
 
-app.use(cors({
-  origin: [
-    'http://mesto.kohanniy.nomoredomains.club/',
-    'https://mesto.kohanniy.nomoredomains.club/',
-    'https://infallible-agnesi-ade491.netlify.app/',
-  ],
-  preflightContinue: false,
-  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'Accept'],
-  credentials: true,
-}));
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
