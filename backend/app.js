@@ -17,18 +17,18 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const options = {
-  origin: [
-    'http://localhost:3000',
-    'http://mesto.kohanniy.nomoredomains.club',
-    'https://infallible-agnesi-ade491.netlify.app',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'Accept'],
-  credentials: true,
-};
+// const options = {
+//   origin: [
+//     'http://localhost:3000',
+//     'http://mesto.kohanniy.nomoredomains.club',
+//     'https://infallible-agnesi-ade491.netlify.app',
+//   ],
+//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'Accept'],
+//   credentials: true,
+// };
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -45,8 +45,23 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(helmet());
 app.use(limiter);
 
-app.options('*', cors(options));
-app.use(cors(options));
+// app.options('*', cors(options));
+// app.use(cors(options));
+
+app.use((req, res, next) => {
+  res.status(200);
+  res.header(
+    'Access-Control-Allow-Origin',
+    'http://mesto.kohanniy.nomoredomains.club',
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  );
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.use(cookieParser());
 app.use(bodyParser.json());
