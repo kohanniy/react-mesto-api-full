@@ -26,7 +26,7 @@ const options = {
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+  allowedHeaders: ['Content-Type', 'Origin', 'Authorization', 'Accept'],
   credentials: true,
 };
 
@@ -45,6 +45,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(helmet());
 app.use(limiter);
 
+app.options('*', cors(options));
 app.use('*', cors(options));
 
 app.use(cookieParser());
