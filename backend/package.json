@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/kohanniy/mesto-backend/issues"
   },
-  "homepage": "https://github.com/kohanniy/mesto-backend#readme",
+  "homepage": "/",
   "devDependencies": {
     "eslint": "^7.14.0",
     "eslint-config-airbnb-base": "^14.2.1",
