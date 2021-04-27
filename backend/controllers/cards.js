@@ -5,11 +5,8 @@ const ForbiddenError = require('../errors/ForbiddenError');
 
 // Находим все карточки
 function getCards(req, res, next) {
-  Card.find({})
+  Card.find({}).sort({ createdAt: -1 })
     .then((cards) => res.status(200).send(cards))
-    .catch(() => {
-      throw new NotFoundError('Карточка не найдена');
-    })
     .catch(next);
 }
 
@@ -17,11 +14,14 @@ function getCards(req, res, next) {
 function createCard(req, res, next) {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(200).send({ data: card }))
-    .catch(() => {
-      throw new ValidationError('Введены неверные данные');
-    })
-    .catch(next);
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        const error = new ValidationError('Введены неверные данные');
+        next(error);
+      }
+      next(err);
+    });
 }
 
 // Удаляем карточку
@@ -52,19 +52,23 @@ function likeCard(req, res, next) {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
       }
-      return res.status(200).send({ data: card });
+      return res.status(200).send(card);
     })
     .catch(next);
 }
 
 // Удаляем лайк
 function dislikeCard(req, res, next) {
-  Card.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
       }
-      return res.status(200).send({ data: card });
+      return res.status(200).send(card);
     })
     .catch(next);
 }

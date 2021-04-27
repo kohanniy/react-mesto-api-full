@@ -15,8 +15,6 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmDeletionPopup from './ConfirmDeletionPopup';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
-import * as auth from '../utils/auth';
-
 
 function App() {
   const [ isEditProfilePopupOpen, setIsEditProfilePopupOpen ] = React.useState(false);
@@ -37,7 +35,7 @@ function App() {
 
   function handleRegisterFormSubmit(password, email) {
     setIsLoading(!isLoading);
-    auth.register(password, email)
+    api.register(password, email)
       .then((data) => {
         setInfoTooltipOpen(true);
         setResultRegistration({...resultRegistration, message: 'Вы успешно зарегистрировались! Войдите в систему.', success: true});
@@ -58,10 +56,9 @@ function App() {
 
   function handleLoginFormSubmit(password, email) {
     setIsLoading(true);
-    auth.authorize(password, email)
+    api.authorize(password, email)
       .then((data) => {
         if (data) {
-          localStorage.setItem('token', data.token);
           setLoggedIn(true);
           setUserEmail(email);
           history.push('/');
@@ -85,9 +82,14 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem('token');
-    history.push('/signin');
-    setLoggedIn(false);
+    api.signout()
+      .then((data) => {
+        history.push('/signin');
+        setLoggedIn(false);
+      })
+      .catch((err) => {
+        rejectPromise(err);
+      })
   }
 
   function handleCardClick(cardData) {
@@ -117,9 +119,8 @@ function App() {
   }, [])
 
   function handleUpdateUser({name, about}) {
-    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.setUserInfo({name, about}, token)
+    api.setUserInfo({name, about})
       .then((newUserData) => {
         setCurrentUser(newUserData);
         closeAllPopups();
@@ -133,9 +134,8 @@ function App() {
   }
 
   function handleUpdateAvatar({ avatar }) {
-    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.setAvatar({avatar}, token)
+    api.setAvatar({avatar})
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -149,9 +149,8 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const token = localStorage.getItem('token');
     const isLiked = card.likes.some(like => like._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked, token)
+    api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
@@ -166,9 +165,8 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.deleteCard(card._id, token)
+    api.deleteCard(card._id)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
@@ -183,9 +181,8 @@ function App() {
   }
 
   function handleAddPlaceSubmit({name, link}) {
-    const token = localStorage.getItem('token');
     setIsLoading(!isLoading);
-    api.addCard({name, link}, token)
+    api.addCard({name, link})
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -213,28 +210,24 @@ function App() {
 
   //Проверка токена
   React.useEffect(() => {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      auth.getContent(token)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            setUserEmail(res.data.email);
-            history.push('/');
-          }
-        })
-        .catch((err) => {
-          setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
-          setInfoTooltipOpen(true);
-        })
-    }
+    api.getUserInfo()
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setUserEmail(res.email);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+        setInfoTooltipOpen(true);
+      })
   }, [history, resultRegistration]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
     if (loggedIn) {
-      const token = localStorage.getItem('token');
-      api.getDataForRendered(token)
+      api.getDataForRendered()
       .then(([ cardsData, userData ]) => {
         setCards(cardsData);
         setCurrentUser(userData);
