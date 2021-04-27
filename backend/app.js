@@ -17,6 +17,19 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
+const options = {
+  origin: [
+    'http://localhost:3000',
+    'http://mesto.kohanniy.nomoredomains.club',
+    'https://infallible-agnesi-ade491.netlify.app',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+  credentials: true,
+};
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -32,10 +45,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 app.use(helmet());
 app.use(limiter);
 
-app.use('*', cors({
-  origin: ['http://mesto.kohanniy.nomoredomains.club', 'http://localhost:3000/'],
-  credentials: true,
-}));
+app.use('*', cors(options));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
