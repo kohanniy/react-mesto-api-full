@@ -46,7 +46,7 @@ app.use(helmet());
 app.use(limiter);
 
 app.options('*', cors(options));
-app.use('*', cors(options));
+app.use(cors(options));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
