@@ -118,6 +118,21 @@ function App() {
     setInfoTooltipOpen(false);
   }, [])
 
+  const checkCookie = React.useCallback(() => {
+    api.getUserInfo()
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          setUserEmail(res.email);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+        setInfoTooltipOpen(true);
+      })
+  }, [history, resultRegistration]);
+
   function handleUpdateUser({name, about}) {
     setIsLoading(!isLoading);
     api.setUserInfo({name, about})
@@ -210,19 +225,8 @@ function App() {
 
   //Проверка токена
   React.useEffect(() => {
-    api.getUserInfo()
-      .then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
-        setInfoTooltipOpen(true);
-      })
-  }, [history, resultRegistration]);
+    checkCookie();
+  }, [checkCookie]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {

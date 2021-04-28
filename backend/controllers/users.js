@@ -46,7 +46,7 @@ function getMe(req, res, next) {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найде');
+        throw new NotFoundError('Пользователь не найден');
       }
       return res.status(200).send(user);
     })
