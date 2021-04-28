@@ -20,7 +20,7 @@ const app = express();
 const options = {
   origin: [
     'http://localhost:3000',
-    'http://mesto.kohanniy.nomoredomains.club',
+    'https://mesto.kohanniy.nomoredomains.club',
     'https://infallible-agnesi-ade491.netlify.app',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
