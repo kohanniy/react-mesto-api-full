@@ -4,7 +4,7 @@
 
 * Адрес сайта - [https://mesto.kohanniy.nomoredomains.club](https://mesto.kohanniy.nomoredomains.club)
 * Домен бэкенда - [https://api.mesto.kohanniy.nomoredomains.club](https://api.mesto.kohanniy.nomoredomains.club)
-* IP-адрес бэкенда - [178.154.205.41](178.154.205.41)
+* IP-адрес бэкенда - [178.154.205.41](https://178.154.205.41)
 
 ## Фронтенд
 
