@@ -5,33 +5,21 @@ const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
 
-// Вход в систему
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: 24 * 60 * 60 * 1000 * 7,
-        httpOnly: true,
-        sameSite: true,
-      }).send(user);
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key',
+        { expiresIn: '7d' },
+      );
+      res.send({ token });
     })
     .catch(next);
-}
-
-// Выход из системы
-function logout(req, res, next) {
-  try {
-    res.cookie('jwt', '', {
-      maxAge: -1,
-      httpOnly: true,
-      sameSite: true,
-    }).send({ message: 'Вы вышли из приложения' });
-  } catch (err) {
-    next(err);
-  }
 }
 
 // Находим всех пользователей
@@ -41,21 +29,9 @@ function getUsers(req, res, next) {
     .catch(next);
 }
 
-// Находим себя
-function getMe(req, res, next) {
-  User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден');
-      }
-      return res.status(200).send(user);
-    })
-    .catch(next);
-}
-
 // Находим конкретного пользователя
 function getUser(req, res, next) {
-  User.findById(req.params.id)
+  User.findById(req.params.id === 'me' ? req.user : req.params.id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
@@ -76,8 +52,8 @@ function createUser(req, res, next) {
       avatar: req.body.avatar,
     }))
     .then((user) => {
-      const { _id, email, name, about, avatar } = user;
-      res.status(201).send({ _id, email, name, about, avatar });
+      const { _id, email } = user;
+      res.status(201).send({ _id, email });
     })
     .catch((err) => {
       if (err.name === 'MongoError' || err.code === 11000) {
@@ -95,7 +71,11 @@ function createUser(req, res, next) {
 // Обновляем профиль
 function updateProfile(req, res, next) {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true },
+  )
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
@@ -115,7 +95,11 @@ function updateProfile(req, res, next) {
 function updateAvatar(req, res, next) {
   const { avatar } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true },
+  )
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
@@ -133,9 +117,7 @@ function updateAvatar(req, res, next) {
 
 module.exports = {
   login,
-  logout,
   getUsers,
-  getMe,
   getUser,
   createUser,
   updateProfile,

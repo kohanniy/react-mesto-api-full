@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://api.mesto.kohanniy.nomoredomains.club';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 export const parseResponseFromServer = (res) => {
   if (res.ok) {
@@ -14,7 +14,6 @@ export const register = (password, email) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    // credentials: 'include',
     body: JSON.stringify({password, email})
   })
   .then(parseResponseFromServer)
@@ -27,7 +26,6 @@ export const authorize = (password, email) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    // credentials: 'include',
     body: JSON.stringify({ password, email })
   })
   .then(parseResponseFromServer)
@@ -40,7 +38,7 @@ export const getContent = (token) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
-    },
+    }
   })
   .then(parseResponseFromServer)
 }

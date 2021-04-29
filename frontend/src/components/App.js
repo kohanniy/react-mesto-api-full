@@ -6,7 +6,7 @@ import Register from './Register';
 import Login from './Login';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import {rejectPromise} from '../utils/utils';
+import { rejectPromise, setToken, getToken, removeToken } from '../utils/utils';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
@@ -25,7 +25,7 @@ function App() {
   const [ isInfoTooltipOpen, setInfoTooltipOpen ] = React.useState(false);
   const [ resultRegistration, setResultRegistration ] = React.useState({});
   const [ selectedCard, setSelectedCard ] = React.useState(false);
-  const [ currentUser, setCurrentUser ] = React.useState('');
+  const [ currentUser, setCurrentUser ] = React.useState({});
   const [ cards, setCards ] = React.useState([]);
   const [ isLoading, setIsLoading ] = React.useState(false);
   const [ loggedIn, setLoggedIn ] = React.useState(false);
@@ -42,7 +42,9 @@ function App() {
         history.push('/signin');
       })
       .catch((err) => {
-        if (err === 400) {
+        if (err.status === 400) {
+          setResultRegistration({...resultRegistration, message: 'Неправильно заполнено одно из полей.', success: false});
+        } else if (err.status === 409) {
           setResultRegistration({...resultRegistration, message: 'Пользователь с таким email уже зарегистрирован.', success: false});
         } else {
           setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
@@ -59,14 +61,17 @@ function App() {
     api.authorize(password, email)
       .then((data) => {
         if (data) {
+          setToken(data.token);
           setLoggedIn(true);
           setUserEmail(email);
           history.push('/');
         }
       })
       .catch((err) => {
-        if (err === 401) {
+        if (err.status === 401) {
           setResultRegistration({...resultRegistration, message: 'Вы ввели неверный email или пароль! Попробуйте еще раз', success: false});
+        } else if (err.status === 400) {
+            setResultRegistration({...resultRegistration, message: 'Не передано одно из полей', success: false});
         } else {
           setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
         }
@@ -82,14 +87,9 @@ function App() {
   }
 
   function handleSignOut() {
-    api.signout()
-      .then((data) => {
-        history.push('/signin');
-        setLoggedIn(false);
-      })
-      .catch((err) => {
-        rejectPromise(err);
-      })
+    removeToken();
+    history.push('/signin');
+    setLoggedIn(false);
   }
 
   function handleCardClick(cardData) {
@@ -118,24 +118,10 @@ function App() {
     setInfoTooltipOpen(false);
   }, [])
 
-  const checkCookie = React.useCallback(() => {
-    api.getUserInfo()
-      .then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          setUserEmail(res.email);
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
-        setInfoTooltipOpen(true);
-      })
-  }, [history, resultRegistration]);
-
   function handleUpdateUser({name, about}) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.setUserInfo({name, about})
+    api.setUserInfo({name, about}, token)
       .then((newUserData) => {
         setCurrentUser(newUserData);
         closeAllPopups();
@@ -149,8 +135,9 @@ function App() {
   }
 
   function handleUpdateAvatar({ avatar }) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.setAvatar({avatar})
+    api.setAvatar({avatar}, token)
       .then((data) => {
         setCurrentUser(data);
         closeAllPopups();
@@ -164,8 +151,9 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(like => like._id === currentUser._id);
-    api.changeLikeCardStatus(card._id, !isLiked)
+    const token = getToken();
+    const isLiked = card.likes.some(like => like === currentUser._id);
+    api.changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
         setCards(newCards);
@@ -180,8 +168,9 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.deleteCard(card._id)
+    api.deleteCard(card._id, token)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
@@ -196,8 +185,9 @@ function App() {
   }
 
   function handleAddPlaceSubmit({name, link}) {
+    const token = getToken();
     setIsLoading(!isLoading);
-    api.addCard({name, link})
+    api.addCard({name, link}, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
@@ -225,13 +215,32 @@ function App() {
 
   //Проверка токена
   React.useEffect(() => {
-    checkCookie();
-  }, [checkCookie]);
+    const token = getToken();
+    if (token) {
+      api.getContent(token)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setUserEmail(res.email);
+            history.push('/');
+          }
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            setResultRegistration({...resultRegistration, message: 'Токен не передан или передан не в том формате', success: false});
+          } else {
+            setResultRegistration({...resultRegistration, message: 'Что-то пошло не так! Попробуйте еще раз', success: false});
+          }
+          setInfoTooltipOpen(true);
+        })
+      }
+  }, [history, resultRegistration]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {
     if (loggedIn) {
-      api.getDataForRendered()
+      const token = getToken();
+      api.getDataForRendered(token)
       .then(([ cardsData, userData ]) => {
         setCards(cardsData);
         setCurrentUser(userData);

@@ -1,3 +1,5 @@
+import React from 'react';
+
 function Input(props) {
   const { name, type, errors, placeholder, handleChange, values, minLength, maxLength, autoComplete, isAuth } = props;
 

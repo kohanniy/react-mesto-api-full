@@ -7,3 +7,15 @@ export function rejectPromise(err) {
 export function handleStopPropagation(e) {
   e.stopPropagation();
 }
+
+export function setToken(token) {
+  localStorage.setItem('token', token);
+}
+
+export function getToken() {
+  return localStorage.getItem('token');
+}
+
+export function removeToken() {
+  localStorage.removeItem('token');
+}

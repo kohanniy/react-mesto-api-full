@@ -8,6 +8,7 @@ import { inputsData } from '../utils/constants';
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const { values, handleChange, errors, isValid, resetForm } = useFormAndValidation();
 
+
   React.useEffect(() => {
     resetForm();
   }, [isOpen, resetForm]);

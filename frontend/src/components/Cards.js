@@ -2,7 +2,6 @@ import Card from './Card';
 
 function Cards(props) {
   const { cards, onConfirmDeletionPopupOpen, onCardLike, onCardClick } = props;
-
   return (
     <section className="cards">
       <ul className="cards__list">

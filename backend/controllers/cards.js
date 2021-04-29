@@ -5,7 +5,7 @@ const ForbiddenError = require('../errors/ForbiddenError');
 
 // Находим все карточки
 function getCards(req, res, next) {
-  Card.find({}).sort({ createdAt: -1 })
+  Card.find({})
     .then((cards) => res.status(200).send(cards))
     .catch(next);
 }
@@ -36,7 +36,7 @@ function deleteCard(req, res, next) {
       }
 
       card.remove();
-      return res.status(200).send({ message: 'Карточка была удалена' });
+      return res.status(200).send({ message: 'Карточка удалена' });
     })
     .catch(next);
 }

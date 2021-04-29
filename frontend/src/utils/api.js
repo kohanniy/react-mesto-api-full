@@ -1,7 +1,6 @@
 class Api {
-  constructor(params) {
-    this._url = params.url;
-    this._headers = params.headers;
+  constructor({ url }) {
+    this._url = url;
   }
 
   _parseResponseFromServer(res) {
@@ -9,75 +8,86 @@ class Api {
       return res.json();
     }
 
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return Promise.reject(res);
   }
 
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this._url}/cards`, {
       method: 'GET',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`
+      }
     })
     .then(this._parseResponseFromServer)
   }
 
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`
+      }
     })
     .then(this._parseResponseFromServer)
   }
 
-  getDataForRendered() {
-    return Promise.all([ this.getInitialCards(), this.getUserInfo() ])
+  getDataForRendered(token) {
+    return Promise.all([ this.getInitialCards(token), this.getUserInfo(token) ])
   }
 
-  addCard(data) {
+  addCard(data, token) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
   }
 
-  setUserInfo(data) {
+  setUserInfo(data, token) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
   }
 
-  setAvatar(data) {
+  setAvatar(data, token) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(data)
     })
     .then(this._parseResponseFromServer)
   }
 
-  deleteCard(id) {
+  deleteCard(id, token) {
     return fetch(`${this._url}/cards/${id}`, {
       method: 'DELETE',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`
+      }
     })
     .then(this._parseResponseFromServer)
   }
 
-  changeLikeCardStatus(id, like) {
-    return fetch(`${this._url}/cards/likes/${id}`, {
+  changeLikeCardStatus(id, like, token) {
+    return fetch(`${this._url}/cards/${id}/likes`, {
       method: like ? 'PUT' : 'DELETE',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     })
     .then(this._parseResponseFromServer)
   }
@@ -85,38 +95,42 @@ class Api {
   register(password, email) {
     return fetch (`${this._url}/signup`, {
       method: 'POST',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({password, email})
     })
     .then(this._parseResponseFromServer)
-  }
+  };
 
   authorize(password, email) {
     return fetch(`${this._url}/signin`, {
       method: 'POST',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ password, email })
     })
     .then(this._parseResponseFromServer)
   }
 
-  signout() {
-    return fetch(`${this._url}/signout`, {
+  getContent(token) {
+    return fetch(`${this._url}/users/me`, {
       method: 'GET',
-      headers: this._headers,
-      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      }
     })
+    .then(this._parseResponseFromServer)
   }
 }
 
 const api = new Api({
-  url: 'http://api.mesto.kohanniy.nomoredomains.club',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  }
+  url: `https://api.mesto.kohanniy.nomoredomains.club`,
 });
 
 export default api;
