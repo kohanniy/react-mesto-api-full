@@ -5,8 +5,8 @@ const { checkId } = require('../middlewares/userRequestValidation');
 
 cardsRouter.get('/cards', getCards);
 cardsRouter.post('/cards', checkCard, createCard);
-cardsRouter.delete('/cards/:cardId', checkId, deleteCard);
-cardsRouter.put('/cards/:cardId/likes', checkId, likeCard);
-cardsRouter.delete('/cards/:cardId/likes', checkId, dislikeCard);
+cardsRouter.delete('/cards/:id', checkId, deleteCard);
+cardsRouter.put('/cards/:id/likes', checkId, likeCard);
+cardsRouter.delete('/cards/:id/likes', checkId, dislikeCard);
 
 module.exports = cardsRouter;

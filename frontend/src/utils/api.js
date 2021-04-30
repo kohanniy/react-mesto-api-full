@@ -115,18 +115,6 @@ class Api {
     })
     .then(this._parseResponseFromServer)
   }
-
-  getContent(token) {
-    return fetch(`${this._url}/users/me`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`
-      }
-    })
-    .then(this._parseResponseFromServer)
-  }
 }
 
 const api = new Api({

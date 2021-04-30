@@ -26,7 +26,7 @@ function createCard(req, res, next) {
 
 // Удаляем карточку
 function deleteCard(req, res, next) {
-  Card.findById(req.params.cardId)
+  Card.findById(req.params.id)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Нет такой карточки');
@@ -38,13 +38,19 @@ function deleteCard(req, res, next) {
       card.remove();
       return res.status(200).send({ message: 'Карточка удалена' });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Карточка с таким id не найдена');
+        next(error);
+      }
+      next(err);
+    });
 }
 
 // Ставим лайк
 function likeCard(req, res, next) {
   Card.findByIdAndUpdate(
-    req.params.cardId,
+    req.params.id,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
@@ -54,13 +60,19 @@ function likeCard(req, res, next) {
       }
       return res.status(200).send(card);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Карточка с таким id не найдена');
+        next(error);
+      }
+      next(err);
+    });
 }
 
 // Удаляем лайк
 function dislikeCard(req, res, next) {
   Card.findByIdAndUpdate(
-    req.params.cardId,
+    req.params.id,
     { $pull: { likes: req.user._id } },
     { new: true },
   )
@@ -70,7 +82,13 @@ function dislikeCard(req, res, next) {
       }
       return res.status(200).send(card);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Карточка с таким id не найдена');
+        next(error);
+      }
+      next(err);
+    });
 }
 
 module.exports = {

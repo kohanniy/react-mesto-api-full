@@ -217,7 +217,7 @@ function App() {
   React.useEffect(() => {
     const token = getToken();
     if (token) {
-      api.getContent(token)
+      api.getUserInfo(token)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
@@ -234,7 +234,7 @@ function App() {
           setInfoTooltipOpen(true);
         })
       }
-  }, [history, resultRegistration]);
+  }, [history]);
 
   //получение и отрисовка данных при загрузке страницы
   React.useEffect(() => {

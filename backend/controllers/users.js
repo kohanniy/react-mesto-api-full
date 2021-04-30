@@ -29,16 +29,39 @@ function getUsers(req, res, next) {
     .catch(next);
 }
 
-// Находим конкретного пользователя
-function getUser(req, res, next) {
-  User.findById(req.params.id === 'me' ? req.user : req.params.id)
+function getMe(req, res, next) {
+  User.findById(req.user._id)
     .then((user) => {
       if (!user) {
         throw new NotFoundError('Пользователь не найден');
       }
       return res.status(200).send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Нет пользователя с таким id');
+        next(error);
+      }
+      next(err);
+    });
+}
+
+// Находим конкретного пользователя
+function getUser(req, res, next) {
+  User.findById(req.params.id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь не найден');
+      }
+      return res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Нет пользователя с таким id');
+        next(error);
+      }
+      next(err);
+    });
 }
 
 // Создаем пользователя
@@ -87,6 +110,10 @@ function updateProfile(req, res, next) {
         const error = new ValidationError('Введены неверные данные');
         next(error);
       }
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Нет пользователя с таким id');
+        next(error);
+      }
       next(err);
     });
 }
@@ -111,6 +138,10 @@ function updateAvatar(req, res, next) {
         const error = new ValidationError('Введены неверные данные');
         next(error);
       }
+      if (err.name === 'CastError') {
+        const error = new NotFoundError('Нет пользователя с таким id');
+        next(error);
+      }
       next(err);
     });
 }
@@ -118,6 +149,7 @@ function updateAvatar(req, res, next) {
 module.exports = {
   login,
   getUsers,
+  getMe,
   getUser,
   createUser,
   updateProfile,

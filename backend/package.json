@@ -2,11 +2,11 @@
   "name": "backend-for-mesto",
   "version": "1.0.0",
   "description": "Learning project",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "lint": "eslint ."
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",

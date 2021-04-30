@@ -8,8 +8,8 @@ const checkLogin = celebrate({
 });
 
 const checkId = celebrate({
-  body: Joi.object().keys({
-    _id: Joi.string().alphanum().length(24).hex(),
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24).hex(),
   }),
 });
 
@@ -17,6 +17,9 @@ const checkNewUser = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string().pattern(/https?:\/\/[www.]?[0-9a-z-]{2,}\.[a-z0-9]{2,6}[a-z0-9-._~:/?#[\]@!$&'()*+,;=]*/),
   }),
 });
 
